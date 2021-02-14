@@ -1,5 +1,4 @@
 import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
-import {getMetrics} from "../api/KeyMetricsApi";
 import {useMetrics} from "../api/hooks/useMetrics";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -17,7 +16,7 @@ export const Dashboard = () => {
     const leadTimeForChange = metrics.leadTimeForChange;
 
     return (
-        <div>
+        <div data-testid="leadTimeForChange">
             <LineChart width={730} height={250} data={leadTimeForChange}
                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                 <CartesianGrid strokeDasharray="3 3"/>
