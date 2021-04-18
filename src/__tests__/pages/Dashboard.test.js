@@ -9,19 +9,13 @@ const mockedUseMetrics = mocked(useMetrics)
 
 describe("dashboard", () => {
 
-    const leadTimeForChange = [{"buildVersion": "b123", "timeInMinutes": 1180},
-        // {"buildVersion":"b121","timeInMinutes":100},
-        // {"buildVersion":"b122","timeInMinutes":180},
-        // {"buildVersion":"b127","timeInMinutes":10},
-        // {"buildVersion":"b126","timeInMinutes":18},
-        // {"buildVersion":"b124","timeInMinutes":208},
-        {"buildVersion": "b125", "timeInMinutes": 118}
-    ]
+    const leadTimeForChange = [{"deployedAt": "2021-02-14", "numberOfDays": 2.3},
+                               {"deployedAt": "2021-02-10", "numberOfDays": 0.0}]
 
-    const deployments = [{"environment": 1, "deployedAt": "2021-02-14T22:00:50.095240Z", "buildVersion": "b131"},
-        {"environment": 2, "deployedAt": "2021-02-17T22:00:50.095240Z", "buildVersion": "b131"},
-        {"environment": 1, "deployedAt": "2021-02-12T22:00:50.095240Z", "buildVersion": "b128"},
-        {"environment": 2, "deployedAt": "2021-02-14T22:00:14.341302Z", "buildVersion": "b128"}]
+    const deployments = [{"deployedAt": "2021-02-14", "buildVersion": "b131"},
+        { "deployedAt": "2021-02-17", "buildVersion": "b131"},
+        { "deployedAt": "2021-02-12", "buildVersion": "b128"},
+        { "deployedAt": "2021-02-14", "buildVersion": "b128"}]
 
     const metrics = {
         serviceName: "blah",
@@ -33,10 +27,20 @@ describe("dashboard", () => {
         mockedUseMetrics.mockReturnValue(metrics)
     })
 
-    it('should have build numbers on x axis when present', () => {
+    it('should have date on x axis when present', () => {
         render(<Dashboard/>)
-        screen.getByText('b123')
-        screen.getByText('b125')
+        screen.getByText('2021-02-14')
+        screen.getByText('2021-02-10')
     })
 
+    it('should display empty graph when no data present', () => {
+        mockedUseMetrics.mockReturnValue({
+                serviceName: "blah",
+                leadTimeForChange: [],
+                deployments: []
+            }
+        )
+        render(<Dashboard/>)
+        screen.getByTestId('leadTimeForChange')
+    })
 })
